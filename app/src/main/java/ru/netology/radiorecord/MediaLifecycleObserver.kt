@@ -35,7 +35,7 @@ class MediaLifecycleObserver : LifecycleEventObserver {
     }
 
     fun firstStartPlay(nameTrack: String) {
-        firstStart = false
+ //       firstStart = false
 
         if (player == null) {
             player = MediaPlayer()
@@ -71,7 +71,7 @@ class MediaLifecycleObserver : LifecycleEventObserver {
 
     fun pauseTrack() {
         player?.pause()
-        flagPlay = false
+        //flagPlay = false
         Log.d(
             "MyLog",
             "pauseTrack"

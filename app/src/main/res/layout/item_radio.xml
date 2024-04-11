@@ -43,6 +43,8 @@
 
                 <ImageView
                     android:id="@+id/image_radio"
+
+                    android:tint="@color/orange"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginVertical="12dp"

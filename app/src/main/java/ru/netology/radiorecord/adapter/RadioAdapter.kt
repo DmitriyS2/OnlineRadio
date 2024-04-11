@@ -25,6 +25,8 @@ class RadioAdapter (private val listener: Listener): ListAdapter<Station, RadioA
 
         fun bind(item: Station) = with(binding) {
         nameRadio.text = item.title
+        nameRadio.setTextColor(if(item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.BLACK)
+
         Glide.with(imageRadio)
             .load(item.icon_fill_colored)
             .into(imageRadio)
@@ -63,4 +65,10 @@ class RadioDiffUtil : DiffUtil.ItemCallback<Station>() {
         return oldItem == newItem
     }
 
+    override fun getChangePayload(oldItem: Station, newItem: Station): Any =
+        Payload()
+
 }
+data class Payload(
+    val id: Int? = null,
+)

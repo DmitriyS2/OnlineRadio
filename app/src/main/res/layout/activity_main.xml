@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
+    android:keepScreenOn="true"
     tools:context=".MainActivity">
 
     <TextView
@@ -15,11 +16,15 @@
         android:gravity="center"
         android:padding="4dp"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:text=" \n "
+        android:minLines="2"
+        android:maxLines="2"
+        android:ellipsize="end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Description" />
+         />
 
     <ImageButton
         android:id="@+id/button_play"
@@ -41,30 +46,42 @@
         app:layout_constraintEnd_toEndOf="@id/text_desc"
         app:layout_constraintTop_toBottomOf="@id/text_desc"
         tools:src="@tools:sample/avatars" />
+
     <TextView
+        android:id="@+id/text_short_radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/avatar"
-        app:layout_constraintBottom_toBottomOf="@id/avatar"
-        app:layout_constraintStart_toStartOf="@id/avatar"
-        app:layout_constraintEnd_toEndOf="@id/avatar"
-        tools:text = "radio"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:id="@+id/text_short_radio"
-        />
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintEnd_toEndOf="@id/avatar"
+        app:layout_constraintStart_toStartOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        tools:text="radio" />
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-android:id="@+id/text_genre"
-    app:layout_constraintTop_toBottomOf="@id/avatar"
-    app:layout_constraintStart_toStartOf="@id/avatar"
-    app:layout_constraintEnd_toEndOf="@id/avatar"
-    android:layout_marginTop="8dp"
-    tools:text = "POP ROCK DANCE"
-    android:textColor="@color/white"
-    />
+    <TextView
+        android:id="@+id/text_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@id/avatar"
+        app:layout_constraintStart_toStartOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/avatar"
+        tools:text="POP ROCK DANCE" />
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginVertical="8dp"
+        app:layout_constraintTop_toBottomOf="@id/text_genre"
+        tools:listitem="@layout/item_radio" />
+
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
@@ -72,15 +89,16 @@ android:id="@+id/text_genre"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_genre" />
+        app:layout_constraintTop_toBottomOf="@id/text_genre"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/retryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:textColor="@color/white"
         android:text="Что-то пошло не так...Попробуйте повторить позже"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/retryButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,8 +109,8 @@ android:id="@+id/text_genre"
         android:id="@+id/retryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="Повторить"
-        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,17 +120,8 @@ android:id="@+id/text_genre"
         android:id="@+id/errorGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="retryTitle,retryButton" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/text_genre"
-
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginVertical="8dp"
-        tools:listitem="@layout/item_radio"
-        />
+        app:constraint_referenced_ids="retryTitle,retryButton"
+        android:visibility="gone"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
