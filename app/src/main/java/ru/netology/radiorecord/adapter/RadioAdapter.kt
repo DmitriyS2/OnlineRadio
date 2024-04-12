@@ -1,11 +1,9 @@
 package ru.netology.radiorecord.adapter
 
 import android.graphics.Color
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -31,11 +29,7 @@ class RadioAdapter (private val listener: Listener): ListAdapter<Station, RadioA
             .load(item.icon_fill_colored)
             .into(imageRadio)
 
-//            cardView1.getBackground()
-//                .setTint(if (item.isChecked)  Color.parseColor(R.color.orange) else Color.WHITE)
-
             cardView1.background
-            //    .setTint(if (item.isChecked)  Color.parseColor(R.color.orange) else Color.WHITE)
                 .setTint(if(item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.WHITE)
 
             cardView2.setOnClickListener {

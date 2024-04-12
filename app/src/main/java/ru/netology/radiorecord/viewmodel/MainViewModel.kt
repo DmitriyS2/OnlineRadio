@@ -69,60 +69,6 @@ class MainViewModel:ViewModel() {
         }
     }
 
-//    fun changeImageTrack(name: String?, flag: Boolean) {
-//        name?.let {
-//            //играется
-//            if (flag) {
-//                listStations.value = listStations.value?.let {
-//                    it.map { data ->
-//                        if (data.name == name) {
-//                            data.copy(isPlaying = true)
-//                        } else {
-//                            data.copy(isPlaying = false)
-//                        }
-//                    }
-//                }
-//                //не играется
-//            } else {
-//                listStations.value = listStations.value?.let {
-//                    it.map { data ->
-//                        if (data.name == name) {
-//                            data.copy(isPlaying = false)
-//                        } else {
-//                            data
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-//    fun goToNextTrack() {
-//        val maxId = listStations.value?.maxByOrNull {
-//            it.id
-//        }?.id ?: 0
-//
-//        val currentId = listStations.value?.filter {
-//            it.name == selectedTrack.value
-//        }?.map { data ->
-//            data.id
-//        }?.firstOrNull() ?: 0
-//
-//        val newId = if (currentId == maxId) 1 else currentId + 1
-//
-//        val newTrack = listStations.value?.firstOrNull {
-//            it.id == newId
-//        }
-//
-//        val newName = newTrack?.name
-//
-//        changeImageTrack(newName, true)
-//
-//        newTrack?.let {
-//            highlight(it)
-//        }
-//    }
-
     fun changeListRadio() {
       listStations.value = dataModel.value?.listRadio
     }

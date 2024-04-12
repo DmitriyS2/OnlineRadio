@@ -13,18 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
+        android:ellipsize="end"
         android:gravity="center"
+        android:maxLines="2"
+        android:minLines="2"
         android:padding="4dp"
+        android:text=" \n "
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:text=" \n "
-        android:minLines="2"
-        android:maxLines="2"
-        android:ellipsize="end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/button_play"
@@ -64,21 +63,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/white"
         android:gravity="center"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@id/avatar"
         app:layout_constraintStart_toStartOf="@id/avatar"
         app:layout_constraintTop_toBottomOf="@id/avatar"
         tools:text="POP ROCK DANCE" />
 
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_radio"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="12dp"
         android:layout_marginVertical="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_genre"
         tools:listitem="@layout/item_radio" />
 
@@ -86,11 +86,11 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_genre"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toBottomOf="@id/text_genre" />
 
     <TextView
         android:id="@+id/retryTitle"
@@ -120,8 +120,8 @@
         android:id="@+id/errorGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="retryTitle,retryButton"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:constraint_referenced_ids="retryTitle,retryButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
