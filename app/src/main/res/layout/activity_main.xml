@@ -34,7 +34,8 @@
         app:layout_constraintBottom_toBottomOf="@id/avatar"
         app:layout_constraintEnd_toStartOf="@id/avatar"
         app:layout_constraintStart_toStartOf="@id/text_desc"
-        app:layout_constraintTop_toTopOf="@id/avatar" />
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        android:contentDescription="@string/buttonplay" />
 
     <ImageView
         android:id="@+id/avatar"
@@ -44,7 +45,8 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="@id/text_desc"
         app:layout_constraintTop_toBottomOf="@id/text_desc"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@tools:sample/avatars"
+        android:contentDescription="@string/avatar" />
 
     <TextView
         android:id="@+id/text_short_radio"
@@ -97,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:text="Что-то пошло не так...Попробуйте повторить позже"
+        android:text="@string/try_again_later"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/retryButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,8 +111,7 @@
         android:id="@+id/retryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="Повторить"
+        android:text="@string/retry"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

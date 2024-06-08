@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RadioRecord</string>
+    <string name="choose_radio">Выберите\nрадио</string>
+    <string name="try_again_later">Что-то пошло не так...Попробуйте повторить позже</string>
+    <string name="retry">Повторить</string>
+    <string name="avatar">avatar</string>
+    <string name="buttonplay">buttonPlay</string>
 </resources>

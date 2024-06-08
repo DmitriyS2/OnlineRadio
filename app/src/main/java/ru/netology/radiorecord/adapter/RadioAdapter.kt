@@ -12,25 +12,26 @@ import ru.netology.radiorecord.R
 import ru.netology.radiorecord.databinding.ItemRadioBinding
 import ru.netology.radiorecord.dto.Station
 
-interface Listener{
+interface Listener {
     fun highlight(station: Station)
 }
 
-class RadioAdapter (private val listener: Listener): ListAdapter<Station, RadioAdapter.RadioHolder>(RadioDiffUtil()) {
+class RadioAdapter(private val listener: Listener) :
+    ListAdapter<Station, RadioAdapter.RadioHolder>(RadioDiffUtil()) {
 
     class RadioHolder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view) {
         private val binding = ItemRadioBinding.bind(view)
 
         fun bind(item: Station) = with(binding) {
-        nameRadio.text = item.title
-        nameRadio.setTextColor(if(item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.BLACK)
+            nameRadio.text = item.title
+            nameRadio.setTextColor(if (item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.BLACK)
 
-        Glide.with(imageRadio)
-            .load(item.icon_fill_colored)
-            .into(imageRadio)
+            Glide.with(imageRadio)
+                .load(item.icon_fill_colored)
+                .into(imageRadio)
 
             cardView1.background
-                .setTint(if(item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.WHITE)
+                .setTint(if (item.isChecked) (itemView.context.getColor(R.color.orange)) else Color.WHITE)
 
             cardView2.setOnClickListener {
                 listener.highlight(item)
@@ -45,7 +46,7 @@ class RadioAdapter (private val listener: Listener): ListAdapter<Station, RadioA
     }
 
     override fun onBindViewHolder(holder: RadioHolder, position: Int) {
-       holder.bind(getItem(position))
+        holder.bind(getItem(position))
     }
 }
 
@@ -63,6 +64,7 @@ class RadioDiffUtil : DiffUtil.ItemCallback<Station>() {
         Payload()
 
 }
+
 data class Payload(
     val id: Int? = null,
 )

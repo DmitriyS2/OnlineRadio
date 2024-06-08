@@ -1,6 +1,5 @@
 package ru.netology.radiorecord
 
-
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.os.Bundle
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -64,7 +62,6 @@ class MainActivity : AppCompatActivity() {
             ).start()
 
             if (!flagPlay) {
-
                 //первый старт
                 if (firstStart) {
                     initializePlayer()
@@ -112,8 +109,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.selectedTrack.observe(this) {
-            Log.d("MyLog", "selectedTrack = $it")
-
             if (it != null) {
                 ObjectAnimator.ofPropertyValuesHolder(
                     binding.textShortRadio,
@@ -123,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                 binding.textShortRadio.text = it.short_title
 
             } else {
-                binding.textShortRadio.text = "Выберите\nрадио"
+                binding.textShortRadio.text = getString(R.string.choose_radio)
             }
 
             binding.textDesc.text = it?.tooltip ?: " \n "
@@ -147,16 +142,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        releasePlayer()
+        if (player?.isPlaying==false) {
+                releasePlayer()
+        }
+
     }
 
     override fun onStop() {
-        releasePlayer()
+        if (player?.isPlaying==false) {
+            releasePlayer()
+        }
         super.onStop()
     }
 
     override fun onDestroy() {
         _binding = null
+        releasePlayer()
         super.onDestroy()
     }
 
@@ -193,33 +194,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun playbackStateListener() = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
-            var stateString = ""
+
             when (playbackState) {
                 ExoPlayer.STATE_IDLE -> {
-                    stateString = "ExoPlayer.STATE_IDLE      -"
                     _binding?.buttonPlay?.setImageResource(R.drawable.play_80)
                     _binding?.buttonPlay?.isEnabled = false
                     _binding?.progress?.visibility = View.VISIBLE
                 }
 
                 ExoPlayer.STATE_BUFFERING -> {
-                    stateString = "ExoPlayer.STATE_BUFFERING -"
                     _binding?.progress?.visibility = View.VISIBLE
                     _binding?.buttonPlay?.isEnabled = false
                 }
                 ExoPlayer.STATE_READY -> {
-                    stateString ="ExoPlayer.STATE_READY     -"
                     _binding?.progress?.visibility = View.GONE
                     _binding?.buttonPlay?.isEnabled = true
                 }
                 ExoPlayer.STATE_ENDED -> {
-                    stateString = "ExoPlayer.STATE_ENDED     -"
                 }
                 else -> {
-                    stateString ="UNKNOWN_STATE             -"
                 }
             }
-            Log.d("MyLog", "changed state to $stateString")
         }
     }
 }
