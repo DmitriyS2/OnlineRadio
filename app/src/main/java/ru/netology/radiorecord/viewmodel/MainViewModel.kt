@@ -33,11 +33,11 @@ class MainViewModel:ViewModel() {
             try {
                 dataModel.postValue(DataModel(loading = true))
                 val data = repository.getAlbum()?.result?.stations ?: emptyList()
-                dataModel.postValue(DataModel(listRadio = data, error = data.isEmpty()))
+                dataModel.postValue(DataModel(loading = false, listRadio = data, error = data.isEmpty()))
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                dataModel.postValue(DataModel(error = true))
+                dataModel.postValue(DataModel(loading = false, error = true))
 
             }
         }

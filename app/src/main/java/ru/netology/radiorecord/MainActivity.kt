@@ -2,6 +2,8 @@ package ru.netology.radiorecord
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,10 +12,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.session.MediaSession
+import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.common.util.concurrent.ListenableFuture
 import ru.netology.radiorecord.adapter.Listener
 import ru.netology.radiorecord.adapter.RadioAdapter
 import ru.netology.radiorecord.databinding.ActivityMainBinding
@@ -27,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private var _binding: ActivityMainBinding? = null
     private var player: ExoPlayer? = null
+    private var mediaSession: MediaSession? = null
 
     private val playbackStateListener: Player.Listener = playbackStateListener()
 
@@ -145,7 +154,6 @@ class MainActivity : AppCompatActivity() {
         if (player?.isPlaying==false) {
                 releasePlayer()
         }
-
     }
 
     override fun onStop() {
@@ -178,18 +186,61 @@ class MainActivity : AppCompatActivity() {
                     MediaItem.fromUri(it)
                     exoPlayer.setMediaItems(listOf(MediaItem.fromUri(it)))
                     exoPlayer.playWhenReady = true
-                    exoPlayer.addListener(playbackStateListener) //Чтобы вызывать обратные вызовы, необходимо зарегистрировать их playbackStateListener в плеере, до prepare
+                        //     exoPlayer.addListener(playbackStateListener) //Чтобы вызывать обратные вызовы, необходимо зарегистрировать их playbackStateListener в плеере, до prepare
+                    exoPlayer.addListener(object : Player.Listener {
+                        override fun onPlaybackStateChanged(playbackState: Int) {
+                            when (playbackState) {
+                                ExoPlayer.STATE_IDLE -> {
+                                    _binding?.buttonPlay?.setImageResource(R.drawable.play_80)
+                                    _binding?.buttonPlay?.isEnabled = false
+                         //           _binding?.progress?.visibility = View.VISIBLE
+                                }
+                                ExoPlayer.STATE_BUFFERING -> {
+                                    _binding?.progress?.visibility = View.VISIBLE
+                                    _binding?.buttonPlay?.isEnabled = false
+                                }
+                                ExoPlayer.STATE_READY -> {
+                                    _binding?.progress?.visibility = View.GONE
+                                    _binding?.buttonPlay?.isEnabled = true
+                                }
+                            }
+                        }
+
+                        override fun onPlayerError(error: PlaybackException) {
+                            showText("Ошибка воспроизведения")
+                            flagPlay = false
+                            _binding?.buttonPlay?.setImageResource(R.drawable.play_80)
+                            _binding?.progress?.visibility = View.GONE
+                        }
+                    })
                     exoPlayer.prepare()
                 }
             }
+        setupMediaSession()
+    }
+
+    private fun setupMediaSession() {
+        // Создаем MediaSession с callback для обработки кнопок
+        player?.let {  mediaSession = MediaSession.Builder(this, it).build()
+            it.addListener(object : Player.Listener {
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    flagPlay = isPlaying
+                    _binding?.buttonPlay?.setImageResource(
+                        if (isPlaying) R.drawable.pause_80 else R.drawable.play_80
+                    )
+                }
+            })
+        }
     }
 
     private fun releasePlayer() {
         firstStart = true
         flagPlay = false
         player?.release()
-        player?.removeListener(playbackStateListener)
+  //      player?.removeListener(playbackStateListener)
         player = null
+        mediaSession?.release()
+        mediaSession = null
     }
 
     private fun playbackStateListener() = object : Player.Listener {
