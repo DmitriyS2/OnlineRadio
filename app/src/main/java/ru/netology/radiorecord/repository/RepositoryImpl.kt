@@ -32,6 +32,6 @@ class RepositoryImpl:Repository {
             }
 
     companion object {
-        const val BASE_URL = "https://www.radiorecord.ru/api/stations"
+        const val BASE_URL = "http://www.radiorecord.ru/api/stations"
     }
 }
