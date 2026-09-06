@@ -1,21 +1,24 @@
 package ru.netology.radiorecord.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.netology.radiorecord.dto.Station
 import ru.netology.radiorecord.model.DataModel
 import ru.netology.radiorecord.repository.Repository
 import ru.netology.radiorecord.repository.RepositoryImpl
-import kotlin.concurrent.thread
 
-class MainViewModel:ViewModel() {
+class MainViewModel : ViewModel() {
     private val repository: Repository = RepositoryImpl()
 
     val dataModel: MutableLiveData<DataModel> = MutableLiveData<DataModel>()
 
-    val listStations: MutableLiveData<List<Station>> =
-        MutableLiveData<List<Station>>()
+    val listStations: MutableLiveData<List<Station>> = MutableLiveData<List<Station>>()
 
     val selectedTrack
         get() = listStations.map {
@@ -29,11 +32,21 @@ class MainViewModel:ViewModel() {
     }
 
     fun getAlbum() {
-        thread {
+        Log.d("MyLog", "vm getAlbum")
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 dataModel.postValue(DataModel(loading = true))
                 val data = repository.getAlbum()?.result?.stations ?: emptyList()
-                dataModel.postValue(DataModel(loading = false, listRadio = data, error = data.isEmpty()))
+                dataModel.postValue(
+                    DataModel(
+                        loading = false,
+                        listRadio = data,
+                        error = data.isEmpty()
+                    )
+                )
+                withContext(Dispatchers.Main) {
+                    listStations.value = data
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -46,30 +59,22 @@ class MainViewModel:ViewModel() {
     fun highlight(station: Station) {
         //снимаем выделение
         if (station.isChecked) {
-            listStations.value = listStations.value?.let {
-                it.map { data ->
-                    if (data.id == station.id) {
-                        data.copy(isChecked = false)
-                    } else {
-                        data
-                    }
+            listStations.value = listStations.value?.map { data ->
+                if (data.id == station.id) {
+                    data.copy(isChecked = false)
+                } else {
+                    data
                 }
             }
         } else {
             //выделяем
-            listStations.value = listStations.value?.let {
-                it.map { data ->
-                    if (data.id == station.id) {
-                        data.copy(isChecked = true)
-                    } else {
-                        data.copy(isChecked = false)
-                    }
+            listStations.value = listStations.value?.map { data ->
+                if (data.id == station.id) {
+                    data.copy(isChecked = true)
+                } else {
+                    data.copy(isChecked = false)
                 }
             }
         }
-    }
-
-    fun changeListRadio() {
-      listStations.value = dataModel.value?.listRadio
     }
 }

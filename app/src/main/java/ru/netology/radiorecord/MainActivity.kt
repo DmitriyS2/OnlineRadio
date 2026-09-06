@@ -2,8 +2,6 @@ package ru.netology.radiorecord
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
-
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -108,8 +106,6 @@ class MainActivity : AppCompatActivity() {
                 binding.progress.isVisible = dataModel.loading
                 binding.errorGroup.isVisible = dataModel.error
                 binding.buttonPlay.isEnabled = !dataModel.error
-
-                viewModel.changeListRadio()
             }
         }
 
@@ -118,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.selectedTrack.observe(this) {
+            Log.d("MyLog", "observe. it:$it")
             if (it != null) {
                 ObjectAnimator.ofPropertyValuesHolder(
                     binding.textShortRadio,
