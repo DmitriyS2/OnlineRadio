@@ -3,23 +3,18 @@ package ru.netology.radiorecord
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import androidx.media3.session.SessionCommand
-import androidx.media3.session.SessionResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.common.util.concurrent.ListenableFuture
 import ru.netology.radiorecord.adapter.Listener
 import ru.netology.radiorecord.adapter.RadioAdapter
 import ru.netology.radiorecord.databinding.ActivityMainBinding
@@ -92,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.retryButton.setOnClickListener {
-            Log.d("MyLog", "retryButton")
             ObjectAnimator.ofPropertyValuesHolder(
                 binding.retryButton,
                 PropertyValuesHolder.ofFloat(View.SCALE_X, 1.0F, 1.2F, 1.0F),
@@ -114,7 +108,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.selectedTrack.observe(this) {
-            Log.d("MyLog", "observe. it:$it")
             if (it != null) {
                 ObjectAnimator.ofPropertyValuesHolder(
                     binding.textShortRadio,
@@ -148,13 +141,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (player?.isPlaying==false) {
-                releasePlayer()
+        if (player?.isPlaying == false) {
+            releasePlayer()
         }
     }
 
     override fun onStop() {
-        if (player?.isPlaying==false) {
+        if (player?.isPlaying == false) {
             releasePlayer()
         }
         super.onStop()
@@ -179,23 +172,26 @@ class MainActivity : AppCompatActivity() {
         player = ExoPlayer.Builder(this)
             .build()
             .also { exoPlayer ->
-                viewModel.selectedTrack.value?.stream_128?.let {
+                val stream = viewModel.selectedTrack.value?.stream_128
+                    ?: viewModel.selectedTrack.value?.stream_64
+                stream?.let {
                     MediaItem.fromUri(it)
                     exoPlayer.setMediaItems(listOf(MediaItem.fromUri(it)))
                     exoPlayer.playWhenReady = true
-                        //     exoPlayer.addListener(playbackStateListener) //Чтобы вызывать обратные вызовы, необходимо зарегистрировать их playbackStateListener в плеере, до prepare
+                    //     exoPlayer.addListener(playbackStateListener) //Чтобы вызывать обратные вызовы, необходимо зарегистрировать их playbackStateListener в плеере, до prepare
                     exoPlayer.addListener(object : Player.Listener {
                         override fun onPlaybackStateChanged(playbackState: Int) {
                             when (playbackState) {
                                 ExoPlayer.STATE_IDLE -> {
                                     _binding?.buttonPlay?.setImageResource(R.drawable.play_80)
                                     _binding?.buttonPlay?.isEnabled = false
-                         //           _binding?.progress?.visibility = View.VISIBLE
                                 }
+
                                 ExoPlayer.STATE_BUFFERING -> {
                                     _binding?.progress?.visibility = View.VISIBLE
                                     _binding?.buttonPlay?.isEnabled = false
                                 }
+
                                 ExoPlayer.STATE_READY -> {
                                     _binding?.progress?.visibility = View.GONE
                                     _binding?.buttonPlay?.isEnabled = true
@@ -218,7 +214,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupMediaSession() {
         // Создаем MediaSession с callback для обработки кнопок
-        player?.let {  mediaSession = MediaSession.Builder(this, it).build()
+        player?.let {
+            mediaSession = MediaSession.Builder(this, it).build()
             it.addListener(object : Player.Listener {
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     flagPlay = isPlaying
@@ -234,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         firstStart = true
         flagPlay = false
         player?.release()
-  //      player?.removeListener(playbackStateListener)
+        //      player?.removeListener(playbackStateListener)
         player = null
         mediaSession?.release()
         mediaSession = null
@@ -254,12 +251,15 @@ class MainActivity : AppCompatActivity() {
                     _binding?.progress?.visibility = View.VISIBLE
                     _binding?.buttonPlay?.isEnabled = false
                 }
+
                 ExoPlayer.STATE_READY -> {
                     _binding?.progress?.visibility = View.GONE
                     _binding?.buttonPlay?.isEnabled = true
                 }
+
                 ExoPlayer.STATE_ENDED -> {
                 }
+
                 else -> {
                 }
             }

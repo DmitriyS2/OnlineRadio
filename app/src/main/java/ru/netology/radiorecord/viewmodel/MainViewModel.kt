@@ -1,6 +1,5 @@
 package ru.netology.radiorecord.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -32,7 +31,6 @@ class MainViewModel : ViewModel() {
     }
 
     fun getAlbum() {
-        Log.d("MyLog", "vm getAlbum")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 dataModel.postValue(DataModel(loading = true))

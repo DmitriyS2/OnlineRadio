@@ -23,7 +23,7 @@ class RepositoryImpl:Repository {
                     .build()
                 val call = client.newCall(request)
                 val response = call.execute()
-                val responseString = response.body?.string()
+                val responseString = response.body.string()
                 gson.fromJson(responseString, trackType)
 
             } catch (e:Exception) {
