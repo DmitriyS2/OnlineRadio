@@ -19,14 +19,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+
       - name: Build Debug
         run: |
           chmod +x ./gradlew
-         ./gradlew assembleDebug
+          ./gradlew assembleDebug
 
       - name: Build Release
         run: |
-         ./gradlew assembleRelease
+          ./gradlew assembleRelease
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
@@ -40,7 +41,10 @@ jobs:
           name: app-release.apk
           path: app/build/outputs/apk/release/*.apk
 
-      - name: Show APK filename
+      - name: Show APK filenames
         run: |
-          echo "APK files found:"
+          echo "Debug APK:"
           ls app/build/outputs/apk/debug/*.apk | xargs -n1 basename
+          echo ""
+          echo "Release APK:"
+          ls app/build/outputs/apk/release/*.apk | xargs -n1 basename
