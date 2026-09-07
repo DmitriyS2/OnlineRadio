@@ -19,7 +19,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-
       - name: Build Debug
         run: |
           chmod +x ./gradlew
